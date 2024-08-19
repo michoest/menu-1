@@ -1,0 +1,16 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "Menu backend",
+  "main": "api.js",
+  "author": "Michael Oesterle",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "helmet": "^7.1.0",
+    "lodash": "^4.17.21",
+    "uuid": "^10.0.0"
+  }
+}
