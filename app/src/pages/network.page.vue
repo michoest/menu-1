@@ -13,49 +13,28 @@
         </q-item-section>
       </q-item>
 
-      <q-separator inset spaced="xl" />
-
-      <q-item-label header>User</q-item-label>
-      <q-item class="q-pb-lg">
-          <q-item-section avatar>
-              <q-avatar>
-                  <img src="https://cdn.quasar.dev/img/avatar4.jpg">
-              </q-avatar>
-          </q-item-section>
-
-          <q-item-section>
-              <q-item-label>{{ store.user.name.first }} {{ store.user.name.last }}</q-item-label>
-              <q-item-label caption lines="1">{{ store.user.email }}</q-item-label>
-          </q-item-section>
-
-          <q-item-section side>
-              <q-btn flat round icon="more_horiz" color="grey" @click="onClickAccountActions" />
-          </q-item-section>
-      </q-item>
-      <q-item>
-          <q-item-section>
-              <q-btn color="negative" outline @click="onClickSignout">Sign out</q-btn>
-          </q-item-section>
-      </q-item>
-
-      <q-separator inset spaced="xl" />
-
       <q-item-label header>Date of last build</q-item-label>
       <q-item>
         <q-item-label>{{ dayjs(buildDate) }}</q-item-label>
       </q-item>
     </q-list>
+    <div>
+      <p>Current time: {{ currentTime }}</p>
+      <p v-if="error">Error: {{ error }}</p>
+      <q-btn @click="onClickSse">SSE</q-btn>
+    </div>
   </q-page>
 </template>
 
 <script setup>
-defineOptions({ name: 'SettingsPage' });
+defineOptions({ name: 'NetworkPage' });
 
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, inject } from 'vue';
 import dayjs from 'dayjs';
 import { buildDate } from 'boot/build-info'
 import { useStore } from 'src/stores/store';
 
+const $notify = inject('notify');
 const store = useStore();
 
 const api = ref('');
@@ -71,16 +50,32 @@ const setAPI = () => {
   $notify(`API updated!`);
 }
 
+const user = {
+  name: {
+    first: 'Michael',
+    last: 'Oesterle'
+  },
+  email: 'mail@michoest.com'
+}
+
+const currentTime = ref(null);
+const error = ref(null);
+
 const onClickAccountActions = async () => {
 
 };
 
 const onClickSignout = async () => {
-  await store.logout();
+
 };
 
 onMounted(async () => {
   api.value = store.persistent.api;
   await checkAPI();
 });
+
+const onClickSse = async () => {
+  await store.connectToSSE();
+};
+
 </script>
